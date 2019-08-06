@@ -27,7 +27,7 @@ $themes = @{
     "docdock" = "hugo-theme-docdock";
 }
 
-$ignoredSiteNames = ".git", "_gsdata_", "output", "generator", "temp"
+$ignoredSiteNames = ".git", "_gsdata_", "output", "generator", "diarygenerator", "temp"
 
 $supportedStaticContentTypesAsImages = "png", "jpg", "jpeg"
 $supportedStaticContentTypesAsVideos = "wma", "mov", "mp4", "avi"
