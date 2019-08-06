@@ -1,0 +1,9 @@
+[submodule "repositories/hugo-theme-docdock"]
+	path = repositories/hugo-theme-docdock
+	url = https://github.com/vjeantet/hugo-theme-docdock.git
+[submodule "repositories/hugo-theme-yinyang"]
+	path = repositories/hugo-theme-yinyang
+	url = https://github.com/joway/hugo-theme-yinyang
+[submodule "repositories/hugo-easy-gallery"]
+	path = repositories/hugo-easy-gallery
+	url = https://github.com/liwenyip/hugo-easy-gallery
