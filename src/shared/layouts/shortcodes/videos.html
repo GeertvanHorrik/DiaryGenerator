@@ -1,0 +1,21 @@
+{{- $dir := path.Join "static" $.Page.Dir }}
+{{- $files := readDir $dir -}}
+
+<h2><a name="videos"></a>Videos</h2>
+
+<table>
+    <th>Name</th>
+    <th>Size in bytes</th>
+{{- range $files }}
+  {{- $fullSourceFileName := path.Join $dir .Name }}
+  {{- $fullTargetFileName := path.Join $.Page.Dir .Name }}
+  {{- $ext := path.Ext $fullSourceFileName }}
+  {{- if or (eq $ext ".MP4") (eq $ext ".mp4") (eq $ext ".avi") }}
+    <tr>
+        <td><a href="{{ $fullTargetFileName | relURL }}" target="_blank"> {{ .Name }}</a></td>
+        <td>{{ .Size }}</td>
+    </tr>
+  {{- end }}
+{{- end }}
+
+</table>

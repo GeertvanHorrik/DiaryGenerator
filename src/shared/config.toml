@@ -1,0 +1,25 @@
+baseURL = ""
+relativeURLs = true
+uglyUrls = true
+languageCode = "en-us"
+DefaultContentLanguage = "en"
+publishDir = "[OUTPUTDIRECTORY]"
+title = "[SITENAME]"
+theme = "docDock"
+
+[languages]
+  [languages.en]
+    contentDir = "content"
+    languageName = "English"
+    weight = 1
+
+[params]
+noHomeIcon = true # default is false
+noSearch = false # default is false
+showVisitedLinks = false # default is false
+themeVariant = "" # choose theme variant "green", "gold" , "gray", "blue" (default)
+ordersectionsby = "title" # ordersectionsby = "title"
+pluralizeListTitles = false
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
