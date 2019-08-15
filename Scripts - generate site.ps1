@@ -44,6 +44,9 @@ foreach ($supportedStaticContentTypesAsVideo in $supportedStaticContentTypesAsVi
     $allSupportedContentTypes.Add($supportedStaticContentTypesAsVideo)
 }
 
+$alwaysConvertRaw = $false
+$rawFileTypes = "nef"
+
 $alwaysConvertHeic = $false
 $heicFileTypes = "heic"
 
@@ -153,6 +156,60 @@ foreach ($siteName in $sourceSites)
     Set-Content -Path $siteConfigFileName -Value $fileContents
 
 #----------------------------------------------------------------------------------------------------
+
+    Write-Host Converting RAW files to jpeg
+
+    $rawConversionStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+    foreach ($rawFileType in $rawFileTypes)
+    {
+        $source = $siteSourceDirectory + "\"
+        $extension = ".$rawFileType"
+
+        Write-Host Checking for raw file extension $extension 
+
+        foreach ($photoFile in Get-ChildItem -Path $source -File -Recurse | Where-Object {$_.Extension -ieq $extension})
+        {
+            $photoRawFileName = $photoFile.FullName
+            $expectedConvertedJpegFileName = $photoRawFileName + ".jpg"
+            $photoJpegFileName = $photoRawFileName.Substring(0, $photoRawFileName.Length - $extension.Length)
+            $photoJpegFileName = $photoJpegFileName + ".jpg"
+
+            Write-Host Converting RAW file $photoRawFileName to jpeg $photoJpegFileName
+
+            if ([System.IO.File]::Exists($photoJpegFileName))
+            {
+                if ($alwaysConvertRaw)
+                {
+                    Write-Host Forcing regeneration of already converted RAW file
+
+                    [System.IO.File]::Delete($photoJpegFileName)
+                }
+                else 
+                {
+                    Write-Host Skipping conversion since jpeg version already exists    
+                }
+            }
+
+            if (![System.IO.File]::Exists($photoJpegFileName))
+            {
+                &.\ConvertTo-Jpeg.ps1 "$photoRawFileName"
+
+                # Since the result is $photoNecFileName.jpg, we need to strip the .NEC (or any other extension)
+                Move-Item $expectedConvertedJpegFileName $photoJpegFileName
+
+                Write-Host Auto orienting the image
+                # convert your-image.jpg -auto-orient output.jpg
+
+                Start-Process -FilePath magick.exe -ArgumentList """$photoJpegFileName"" -auto-orient ""$photoJpegFileName""" -NoNewWindow -PassThru -Wait
+            }
+        }
+    }
+
+    $rawConversionStopwatch.Stop()
+
+    Write-Host RAW to jpeg conversion for $siteName took $rawConversionStopwatch.Elapsed
+    #----------------------------------------------------------------------------------------------------
 
     Write-Host Converting heic iOS files to jpeg
 
